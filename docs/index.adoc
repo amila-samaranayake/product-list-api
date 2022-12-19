@@ -1,0 +1,278 @@
+= Sample API for fetching Product List
+Author : Amila Samaranayake
+:description: Project product-list-api is a simple RESTful API developed using NodeJS - Express application with Typescript and dummyjson.com as the database.
+:keywords: NodeJs, Typescript, RestAPI
+:page-description: {description}
+:page-keywords: {keywords}
+:page-layout: docs
+ifndef::env-site[]
+:toc: left
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:source-highlighter: highlightjs
+endif::[]
+:experimental:
+:mdash: &#8212;
+:language: asciidoc
+:source-language: {language}
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:imagesdir: ./images
+// Refs
+:url-github: https://github.com/amila-samaranayake/product-list-api
+
+Project *product-list-api* is a simple *RESTful API* developed using *NodeJS - Express* application with *Typescript* and *dummyjson.com* as the database. + 
+
+TIP: You can find the Github repo in {url-github}[product-list-api].
+
+In this document:
+
+- The introduction and the structure of the product-list-api
+- Prerequisite and local installation guide
+- Application run and test guide
+- Describe assumption and dependencies
+
+Let's dive in to product-list-api!
+
+== Introduction 
+
+This is a simple Rest API to work with simple Product Model. *HTTP methods*: GET
+
+Application source code structure
+
+image::codestructure.png[] 
+
+
+== Prerequisite and local installation guide
+
+Primary requirements for the project is NodeJS installed on your environment.
+
+TIP: Open up a terminal and run following commands to check primary requirements  + 
+`node -v` : If Node installed you will get the Node version
+
+1. Download or clone source code from github {url-github}[https://github.com/amila-samaranayake/product-list-api]
+2. Open the source via a code editor or cmd
+3. Run `npm install`
+4. Next step is to build the project with typescript (`npm install` will install all the modules including Typescript Compiler (tsc), If you are having issues with Typescript compiler please try to install it globally `npm install -g typescript` ) 
+`npm run build` this will create `./dist` directory. `./dist` folder is git ignored. 
++
+--
+----
+APP_VERSION=0.1.0
+SERVER_PORT=3010
+APP_TOKEN=
+DUMMYURL="https://dummyjson.com/"
+----
+
+NOTE: Assume all these `environment variables` will be set by pipeline. Since we don't have an actual pipeline we can simulate this using `.env` file. But it this application all the constant variables are set up in the `api.constants.ts`
+--
+
+=== Development Scripts
+    * `npm run build` : To build typescript files and this will create `/dist` directory.
+    * `npm run clean` : To clean `./dist` directory .
+    * `npm run start` : To Clean,Build and Start the application.
+
+== Application endpoint and test guide
+
+=== Available API Endpoints
+
+* URLs: + 
+`/api/v1/products`
+
+* Methods: + 
+GET
++
+--
+[source]
+----
+{ 
+    IProduct {
+        id: string;
+        title: string;
+        description: string;
+        price: number;
+        discountPercentage: number;
+        rating: number;
+        stock: number;
+        brand: string;
+        category: string;
+        thumbnail: string;
+        images: [];
+    }
+}
+
+----
+--
+
+== product-list-api Operations
+
+=== Get All Products
+** URL : `/api/v1/products`
+** Request Method : `GET`
+** Response : List of Products Objects (JSON)
++
+--
+[source]
+----
+Status: 200 OK
+----
+[source]
+----
+[
+    {
+        "id": 1,
+        "title": "iPhone 9",
+        "description": "An apple mobile which is nothing like apple",
+        "price": 549,
+        "discountPercentage": 12.96,
+        "rating": 4.69,
+        "stock": 94,
+        "brand": "Apple",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/1/1.jpg",
+            "https://i.dummyjson.com/data/products/1/2.jpg",
+            "https://i.dummyjson.com/data/products/1/3.jpg",
+            "https://i.dummyjson.com/data/products/1/4.jpg",
+            "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "iPhone X",
+        "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+        "price": 899,
+        "discountPercentage": 17.94,
+        "rating": 4.44,
+        "stock": 34,
+        "brand": "Apple",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+        ]
+    },
+]
+----
+--
+
+=== Get All Categories
+
+** URL : `/api/v1/products/categories`
+** Request Method : `GET`
+** Response : Requested Categories String Array (JSON)
++
+--
+[source]
+----
+Status: 200 OK
+----
+[source]
+----
+[
+    "smartphones",
+    "laptops",
+    "fragrances",
+    "skincare",
+    "groceries",
+    "home-decoration",
+    "furniture",
+    "tops",
+    "womens-dresses",
+    "womens-shoes",
+    "mens-shirts",
+    "mens-shoes",
+    "mens-watches",
+    "womens-watches",
+    "womens-bags",
+    "womens-jewellery",
+    "sunglasses",
+    "automotive",
+    "motorcycle",
+    "lighting"
+]
+----
+--
+
+=== Get Products For Category
+** URL : `/api/v1/products/category/:category` => `/api/v1/products/category/smartphones`
+** Request Method : `GET`
+** Response : List of Products Objects for requested category (JSON)
++
+--
+[source]
+----
+Status: 200 OK
+----
+[source]
+----
+"products": [
+        {
+            "id": 1,
+            "title": "iPhone 9",
+            "description": "An apple mobile which is nothing like apple",
+            "price": 549,
+            "discountPercentage": 12.96,
+            "rating": 4.69,
+            "stock": 94,
+            "brand": "Apple",
+            "category": "smartphones",
+            "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+            "images": [
+                "https://i.dummyjson.com/data/products/1/1.jpg",
+                "https://i.dummyjson.com/data/products/1/2.jpg",
+                "https://i.dummyjson.com/data/products/1/3.jpg",
+                "https://i.dummyjson.com/data/products/1/4.jpg",
+                "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "iPhone X",
+            "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+            "price": 899,
+            "discountPercentage": 17.94,
+            "rating": 4.44,
+            "stock": 34,
+            "brand": "Apple",
+            "category": "smartphones",
+            "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+            "images": [
+                "https://i.dummyjson.com/data/products/2/1.jpg",
+                "https://i.dummyjson.com/data/products/2/2.jpg",
+                "https://i.dummyjson.com/data/products/2/3.jpg",
+                "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+            ]
+        },
+]
+----
+--
+
+== Application Logger
+* This application support two types of logger transports
+** Console : + 
+    This is for debug level logs.
+** File : + 
+    All info level logs will be stored in a log file (`logs/productListApi.log`). This file is ignored from git.
+
+== Describe assumption and dependencies
+
+* Since this is a sample application haven't used any authentication mechanism.
+* 
+
+== Documentation
+
+* API document is in `asciidoc` format and It is in the repo.(`/docs` directory).
+* Document URL : + 
+** `/docs` : This will return api documentation index file.
+** `/api` : Redirect to the `/docs` static file share.
+** `/docs/index.adoc` : This will download the asciidoc file. 
+
+
